@@ -1,6 +1,7 @@
 import 'bulma/css/bulma.css';
 import './App.scss';
 import { useState } from 'react';
+import classNames from 'classnames';
 
 export const goods = [
   'Dumplings',
@@ -16,21 +17,25 @@ export const goods = [
 ];
 
 export const App = () => {
-  const [isSelected, setIsSelected] = useState('Jam');
+  const [selectedGood, setSelectedGood] = useState('Jam');
+
+  const message = !selectedGood
+    ? 'No goods selected'
+    : `${selectedGood} is selected`;
 
   const handleSelectGood = good => {
-    setIsSelected(good);
+    setSelectedGood(good);
   };
 
   const clearSection = () => {
-    setIsSelected('');
+    setSelectedGood('');
   };
 
   return (
     <main className="section container">
       <h1 className="title is-flex is-align-items-center">
-        {!isSelected ? 'No goods selected' : `${isSelected} is selected`}
-        {isSelected && (
+        {message}
+        {selectedGood && (
           <button
             data-cy="ClearButton"
             type="button"
@@ -46,12 +51,12 @@ export const App = () => {
             <tr
               key={good}
               data-cy="Good"
-              className={
-                isSelected === good ? 'has-background-success-light' : ''
-              }
+              className={classNames({
+                'has-background-success-light': selectedGood === good,
+              })}
             >
               <td>
-                {isSelected !== good && (
+                {selectedGood !== good && (
                   <button
                     data-cy="AddButton"
                     type="button"
@@ -61,7 +66,7 @@ export const App = () => {
                     +
                   </button>
                 )}
-                {isSelected === good && (
+                {selectedGood === good && (
                   <button
                     data-cy="RemoveButton"
                     type="button"
